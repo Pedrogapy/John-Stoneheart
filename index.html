@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>John Stoneheart | Ficha Automatizada</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-runes" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="hero__content">
+      <p class="eyebrow">Ficha automatizada de campanha</p>
+      <h1>John Stoneheart</h1>
+      <p class="subtitle">Anão feiticeiro de magia selvagem, velho demais para desistir e teimoso demais para aceitar que os deuses já escreveram seu caminho.</p>
+      <div class="hero-actions">
+        <button class="primary" data-action="quick-save">Salvar agora</button>
+        <button data-action="export-json">Exportar JSON</button>
+        <label class="file-button">
+          Importar JSON
+          <input type="file" id="importFile" accept="application/json" />
+        </label>
+        <button class="danger" data-action="reset-sheet">Resetar ficha</button>
+      </div>
+    </div>
+    <aside class="destiny-card">
+      <span class="destiny-card__label">Destino</span>
+      <strong>Traçado pelos deuses</strong>
+      <p>Mas ainda não aceito pelo coração de John.</p>
+    </aside>
+  </header>
+
+  <main class="layout">
+    <section class="panel identity-panel" aria-labelledby="identidade-title">
+      <div class="panel-header">
+        <h2 id="identidade-title">Identidade</h2>
+        <span class="chip">D&D 5e 2024</span>
+      </div>
+
+      <div class="grid two">
+        <label>Nome
+          <input data-bind="name" type="text" />
+        </label>
+        <label>Pronomes
+          <input data-bind="pronouns" type="text" placeholder="opcional" />
+        </label>
+        <label>Antecedente
+          <input data-bind="background" type="text" />
+        </label>
+        <label>Espécie
+          <input data-bind="species" type="text" />
+        </label>
+        <label>Classe
+          <input data-bind="className" type="text" />
+        </label>
+        <label>Subclasse
+          <input data-bind="subclass" type="text" />
+        </label>
+        <label>Nível
+          <input data-bind="level" type="number" min="1" />
+        </label>
+        <label>EXP
+          <input data-bind="xp" type="number" min="0" />
+        </label>
+      </div>
+
+      <label class="wide-label">Conceito do personagem
+        <textarea data-bind="concept" rows="6"></textarea>
+      </label>
+    </section>
+
+    <section class="panel vital-panel" aria-labelledby="vital-title">
+      <div class="panel-header">
+        <h2 id="vital-title">Combate e recursos</h2>
+        <span class="save-status" id="saveStatus">Salvo localmente</span>
+      </div>
+
+      <div class="stat-strip">
+        <label>CA
+          <input data-bind="ac" type="number" />
+        </label>
+        <label>Iniciativa
+          <input data-bind="initiativeBonus" type="number" />
+        </label>
+        <label>Deslocamento
+          <input data-bind="speed" type="text" />
+        </label>
+        <label>Tamanho
+          <input data-bind="size" type="text" />
+        </label>
+        <label>Bônus Prof.
+          <input data-bind="profBonus" type="number" />
+        </label>
+        <label>Percepção Passiva
+          <output id="passivePerception">10</output>
+        </label>
+      </div>
+
+      <div class="resource-grid">
+        <div class="resource-card hp-card">
+          <h3>Pontos de Vida</h3>
+          <div class="resource-main"><span id="hpCurrentText">0</span>/<span id="hpMaxText">0</span></div>
+          <div class="small-grid three">
+            <label>Atuais<input data-bind="hp.current" type="number" /></label>
+            <label>Máx<input data-bind="hp.max" type="number" /></label>
+            <label>Temp<input data-bind="hp.temp" type="number" /></label>
+          </div>
+          <div class="button-row">
+            <button data-action="damage">Dano</button>
+            <button data-action="heal">Cura</button>
+            <button data-action="full-heal">Restaurar</button>
+          </div>
+        </div>
+
+        <div class="resource-card">
+          <h3>Dado de Vida</h3>
+          <label>Dado
+            <input data-bind="hitDie" type="text" />
+          </label>
+          <label>Gastos
+            <input data-bind="hitDiceSpent" type="number" min="0" />
+          </label>
+          <button data-roll="hit-die">Rolar dado de vida</button>
+        </div>
+
+        <div class="resource-card">
+          <h3>Pontos de Feitiçaria</h3>
+          <div class="resource-main"><span id="spCurrentText">0</span>/<span id="spMaxText">0</span></div>
+          <div class="small-grid two">
+            <label>Atuais<input data-bind="sorcery.current" type="number" /></label>
+            <label>Máx<input data-bind="sorcery.max" type="number" /></label>
+          </div>
+          <div class="button-row">
+            <button data-action="spend-sp" data-cost="2">Magia Acelerada</button>
+            <button data-action="spend-sp" data-cost="3">Magia Agravada</button>
+          </div>
+        </div>
+
+        <div class="resource-card death-card">
+          <h3>Salvaguardas contra morte</h3>
+          <div class="check-track" id="deathSuccesses"></div>
+          <span>Sucessos</span>
+          <div class="check-track" id="deathFailures"></div>
+          <span>Falhas</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel abilities-panel" aria-labelledby="atributos-title">
+      <div class="panel-header">
+        <h2 id="atributos-title">Atributos, salvaguardas e perícias</h2>
+        <button data-roll="initiative">Rolar iniciativa</button>
+      </div>
+      <div id="abilitiesGrid" class="abilities-grid"></div>
+    </section>
+
+    <section class="panel magic-panel" aria-labelledby="magia-title">
+      <div class="panel-header">
+        <h2 id="magia-title">Magia</h2>
+        <span class="chip purple">Magia Selvagem</span>
+      </div>
+
+      <div class="spellcasting-box">
+        <label>Habilidade chave
+          <select data-bind="spellcasting.ability">
+            <option value="cha">Carisma</option>
+            <option value="int">Inteligência</option>
+            <option value="wis">Sabedoria</option>
+          </select>
+        </label>
+        <div class="big-number">
+          <span>Mod. Conjuração</span>
+          <strong id="spellMod">+0</strong>
+        </div>
+        <div class="big-number">
+          <span>CD de Magia</span>
+          <strong id="spellDC">10</strong>
+        </div>
+        <div class="big-number">
+          <span>Ataque com Magia</span>
+          <strong id="spellAttack">+0</strong>
+        </div>
+      </div>
+
+      <div class="spell-slots" id="spellSlots"></div>
+
+      <div class="wild-magic">
+        <div>
+          <h3>Surto de Magia Selvagem</h3>
+          <p>A magia de John não está apenas dentro dele. Ela puxa o destino dele pela barba quando acha necessário.</p>
+        </div>
+        <div class="wild-actions">
+          <button class="primary" data-action="wild-surge-check">Teste de instabilidade</button>
+          <button data-action="wild-surge-table">Rolar efeito selvagem</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel attacks-panel" aria-labelledby="ataques-title">
+      <div class="panel-header">
+        <h2 id="ataques-title">Armas, truques e ataques</h2>
+        <button data-action="add-attack">Adicionar ataque</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Bônus/CD</th>
+              <th>Dano e tipo</th>
+              <th>Notas</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="attacksBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel spells-panel" aria-labelledby="feiticos-title">
+      <div class="panel-header">
+        <h2 id="feiticos-title">Truques e magias preparadas</h2>
+        <button data-action="add-spell">Adicionar magia</button>
+      </div>
+      <div class="spell-filter">
+        <button data-filter="all" class="active">Todas</button>
+        <button data-filter="0">Truques</button>
+        <button data-filter="1">Nível 1</button>
+        <button data-filter="2">Nível 2</button>
+        <input id="spellSearch" type="search" placeholder="Buscar magia..." />
+      </div>
+      <div id="spellsList" class="spells-list"></div>
+    </section>
+
+    <section class="panel prof-panel" aria-labelledby="proficiencias-title">
+      <div class="panel-header">
+        <h2 id="proficiencias-title">Proficiências, traços e equipamento</h2>
+      </div>
+      <div class="grid three">
+        <label>Armas
+          <textarea data-bind="proficiencies.weapons" rows="4"></textarea>
+        </label>
+        <label>Armaduras
+          <textarea data-bind="proficiencies.armor" rows="4"></textarea>
+        </label>
+        <label>Ferramentas
+          <textarea data-bind="proficiencies.tools" rows="4"></textarea>
+        </label>
+      </div>
+      <div class="grid two">
+        <label>Traços de espécie
+          <textarea data-bind="speciesTraits" rows="6"></textarea>
+        </label>
+        <label>Características de classe
+          <textarea data-bind="classFeatures" rows="6"></textarea>
+        </label>
+      </div>
+      <label class="wide-label">Equipamento
+        <textarea data-bind="equipment" rows="6"></textarea>
+      </label>
+      <div class="coins">
+        <label>Cobre<input data-bind="coins.cp" type="number" /></label>
+        <label>Prata<input data-bind="coins.sp" type="number" /></label>
+        <label>Electro<input data-bind="coins.ep" type="number" /></label>
+        <label>Ouro<input data-bind="coins.gp" type="number" /></label>
+        <label>Platina<input data-bind="coins.pp" type="number" /></label>
+      </div>
+    </section>
+
+    <section class="panel notes-panel" aria-labelledby="notas-title">
+      <div class="panel-header">
+        <h2 id="notas-title">Aparência, personalidade e notas</h2>
+      </div>
+      <div class="grid two">
+        <label>Aparência
+          <textarea data-bind="appearance" rows="7"></textarea>
+        </label>
+        <label>Antecedente e personalidade
+          <textarea data-bind="personality" rows="7"></textarea>
+        </label>
+        <label>Idiomas
+          <textarea data-bind="languages" rows="4"></textarea>
+        </label>
+        <label>Sintonização com itens mágicos
+          <textarea data-bind="attunement" rows="4"></textarea>
+        </label>
+      </div>
+    </section>
+
+    <section class="panel roller-panel" aria-labelledby="rolagens-title">
+      <div class="panel-header">
+        <h2 id="rolagens-title">Rolagens e histórico</h2>
+        <button data-action="clear-log">Limpar histórico</button>
+      </div>
+      <div class="roller-box">
+        <input id="customRoll" type="text" placeholder="Ex.: 1d20+5, 2d12, 3d8+3" />
+        <button class="primary" data-action="custom-roll">Rolar</button>
+        <button data-action="custom-roll-adv">Vantagem</button>
+        <button data-action="custom-roll-dis">Desvantagem</button>
+      </div>
+      <ol id="rollLog" class="roll-log"></ol>
+    </section>
+  </main>
+
+  <template id="editableRowTemplate">
+    <tr>
+      <td><input class="row-name" type="text" /></td>
+      <td><input class="row-bonus" type="text" /></td>
+      <td><input class="row-damage" type="text" /></td>
+      <td><input class="row-notes" type="text" /></td>
+      <td class="row-actions">
+        <button class="mini attack-roll">Atk</button>
+        <button class="mini damage-roll">Dano</button>
+        <button class="mini ghost remove-row">×</button>
+      </td>
+    </tr>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>

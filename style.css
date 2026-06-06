@@ -835,3 +835,66 @@ tr:last-child td {
     height: 42px;
   }
 }
+
+.feature-track,
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.feature-card,
+.rule-card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(13, 10, 8, 0.42);
+  padding: 14px;
+}
+
+.feature-card p,
+.rule-card p,
+.mini-note,
+.prep-summary {
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.feature-card p strong,
+.prep-summary strong {
+  color: var(--gold-2);
+}
+
+.mini-note {
+  font-size: 0.78rem;
+  margin: 0 0 10px;
+}
+
+.prep-summary {
+  margin: -4px 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(12, 9, 7, 0.42);
+}
+
+.spell-card.legacy {
+  border-color: rgba(233, 112, 99, 0.35);
+  background: linear-gradient(180deg, rgba(75, 29, 25, 0.34), rgba(13, 10, 8, 0.42));
+}
+
+.rules-panel {
+  grid-column: span 6;
+}
+
+@media (max-width: 1180px) {
+  .feature-track,
+  .rules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rules-panel {
+    grid-column: span 12;
+  }
+}

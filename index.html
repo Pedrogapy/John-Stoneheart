@@ -13,7 +13,7 @@
     <div class="hero__content">
       <p class="eyebrow">Ficha automatizada de campanha</p>
       <h1>John Stoneheart</h1>
-      <p class="subtitle">Anão feiticeiro de magia selvagem, velho demais para desistir e teimoso demais para aceitar que os deuses já escreveram seu caminho.</p>
+      <p class="subtitle">Anão feiticeiro de Feitiçaria Selvagem, velho demais para desistir e teimoso demais para aceitar que os deuses já escreveram seu caminho.</p>
       <div class="hero-actions">
         <button class="primary" data-action="quick-save">Salvar agora</button>
         <button data-action="export-json">Exportar JSON</button>
@@ -133,7 +133,11 @@
           </div>
           <div class="button-row">
             <button data-action="spend-sp" data-cost="2">Magia Acelerada</button>
-            <button data-action="spend-sp" data-cost="3">Magia Agravada</button>
+            <button data-action="spend-sp" data-cost="2">Magia Agravada</button>
+            <button data-action="create-slot" data-level="1" data-cost="2">Criar espaço 1º</button>
+            <button data-action="create-slot" data-level="2" data-cost="3">Criar espaço 2º</button>
+            <button data-action="slot-to-sp" data-level="1">1º → PF</button>
+            <button data-action="slot-to-sp" data-level="2">2º → PF</button>
           </div>
         </div>
 
@@ -158,7 +162,7 @@
     <section class="panel magic-panel" aria-labelledby="magia-title">
       <div class="panel-header">
         <h2 id="magia-title">Magia</h2>
-        <span class="chip purple">Magia Selvagem</span>
+        <span class="chip purple">Feitiçaria Selvagem 2024</span>
       </div>
 
       <div class="spellcasting-box">
@@ -183,18 +187,64 @@
         </div>
       </div>
 
+      <div class="feature-track">
+        <article class="feature-card">
+          <h3>Feitiçaria Inata</h3>
+          <p id="innateStatus">Inativa</p>
+          <div class="button-row">
+            <button class="primary" data-action="activate-innate">Ativar</button>
+            <button data-action="end-innate">Encerrar</button>
+          </div>
+        </article>
+        <article class="feature-card">
+          <h3>Marés do Caos</h3>
+          <p id="tidesStatus">Disponível</p>
+          <div class="button-row">
+            <button data-action="use-tides">Usar vantagem</button>
+          </div>
+        </article>
+      </div>
+
       <div class="spell-slots" id="spellSlots"></div>
 
       <div class="wild-magic">
         <div>
           <h3>Surto de Magia Selvagem</h3>
-          <p>A magia de John não está apenas dentro dele. Ela puxa o destino dele pela barba quando acha necessário.</p>
+          <p>Depois de conjurar uma magia de Feiticeiro com espaço, role o teste oficial. No 20, role d100 e consulte a tabela do livro.</p>
         </div>
         <div class="wild-actions">
-          <button class="primary" data-action="wild-surge-check">Teste de instabilidade</button>
-          <button data-action="wild-surge-table">Rolar efeito selvagem</button>
+          <button class="primary" data-action="wild-surge-check">Teste oficial d20</button>
+          <button data-action="wild-surge-table">Rolar d100</button>
         </div>
       </div>
+    </section>
+
+    <section class="panel rules-panel" aria-labelledby="regras-title">
+      <div class="panel-header">
+        <h2 id="regras-title">Regras 2024 aplicadas</h2>
+        <span class="chip">Livro do Jogador</span>
+      </div>
+      <div class="rules-grid">
+        <article class="rule-card">
+          <h3>Feiticeiro nível 3</h3>
+          <p>Carisma é a habilidade de conjuração. O nível 3 tem 3 Pontos de Feitiçaria, 4 truques de Feiticeiro, 6 magias de Feiticeiro preparadas, 4 espaços de 1º círculo e 2 de 2º círculo.</p>
+        </article>
+        <article class="rule-card">
+          <h3>Feitiçaria Selvagem</h3>
+          <p>Marés do Caos dá vantagem em um Teste de D20. Depois disso, a próxima magia de Feiticeiro com espaço causa um Surto automático e recarrega Marés do Caos.</p>
+        </article>
+        <article class="rule-card">
+          <h3>Anão</h3>
+          <p>Deslocamento 9 m, Visão no Escuro 36 m, resistência a veneno, Tenacidade Anã e Conhecimento de Pedras com Sismiconsciência.</p>
+        </article>
+        <article class="rule-card">
+          <h3>Sábio</h3>
+          <p>Arcanismo, História, Suprimentos de Calígrafo e Iniciado em Magia (Mago). Mãos Mágicas e Reparar foram tratados como truques do talento.</p>
+        </article>
+      </div>
+      <label class="wide-label">Notas de ajuste
+        <textarea data-bind="ruleNotes" rows="5"></textarea>
+      </label>
     </section>
 
     <section class="panel attacks-panel" aria-labelledby="ataques-title">
@@ -230,6 +280,7 @@
         <button data-filter="2">Nível 2</button>
         <input id="spellSearch" type="search" placeholder="Buscar magia..." />
       </div>
+      <p id="spellPrepSummary" class="prep-summary">Magias de Feiticeiro preparadas: 0/6.</p>
       <div id="spellsList" class="spells-list"></div>
     </section>
 

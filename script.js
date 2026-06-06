@@ -1,4 +1,5 @@
-const STORAGE_KEY = "john-stoneheart-sheet-v1";
+const STORAGE_KEY = "john-stoneheart-sheet-v2-phb2024";
+const SORCERER_PREPARED_LIMIT = 6;
 
 const abilityLabels = {
   str: "Força",
@@ -36,102 +37,82 @@ const defaultSheet = {
   background: "Sábio",
   species: "Anão",
   className: "Feiticeiro",
-  subclass: "Magia Selvagem",
+  subclass: "Feitiçaria Selvagem",
   level: 3,
   xp: 1224,
   ac: 11,
   initiativeBonus: 1,
   speed: "9 m",
-  size: "1,50 m",
+  size: "Médio, cerca de 1,50 m",
   profBonus: 2,
   hitDie: "d6",
   hitDiceSpent: 0,
   concept: `John é um feiticeiro anão com mais de 100 anos. Seu sonho sempre foi ser minerador, como a maior parte de seu povo esperava dele. Ele seguiu para a ilha da campanha em busca de pedras mágicas e minérios, tentando sentir que realizou, ao menos em parte, o dever que acreditava ter deixado para trás.\n\nSeus poderes foram dados pelos deuses, mas sua falta de vontade em cumprir o propósito de tornar o mundo um lugar melhor fez sua magia perder estabilidade. Ao longo dos anos, ela se tornou selvagem, consumindo mana para lançar feitiços que nem sempre John escolheu usar. Agora ele busca riquezas, pedras valiosas e talvez a chance de reacender uma chama que ainda não morreu dentro de seu coração.`,
   hp: { current: 10, max: 23, temp: 0 },
   sorcery: { current: 3, max: 3 },
+  innateSorcery: { active: false, uses: 2, max: 2 },
+  tidesOfChaos: { available: true },
   death: { successes: 0, failures: 0 },
   abilities: {
     str: { score: 10, saveProf: false },
     dex: { score: 13, saveProf: false },
-    con: { score: 14, saveProf: false },
+    con: { score: 14, saveProf: true },
     int: { score: 15, saveProf: false },
     wis: { score: 14, saveProf: false },
-    cha: { score: 16, saveProf: false },
+    cha: { score: 16, saveProf: true },
   },
   skillProfs: {
     arcana: true,
     history: true,
-    nature: true,
     insight: true,
     persuasion: true,
   },
   spellcasting: { ability: "cha" },
   spellSlots: {
-    1: { max: 5, used: 0 },
-    2: { max: 2, used: 0 },
+    1: { max: 4, used: 0, created: 0 },
+    2: { max: 2, used: 0, created: 0 },
   },
   attacks: [
-    { name: "Explosão Elemental", bonus: "magia", damage: "1d8", notes: "Truque, dano elemental" },
-    { name: "Toque Chocante", bonus: "magia", damage: "1d8", notes: "Truque, elétrico" },
-    { name: "Machado +1", bonus: "+3", damage: "1d8+1", notes: "Arma carregada por John" },
+    { name: "Explosão Elemental", bonus: "magia", damage: "1d8", notes: "Truque de Feiticeiro. Ataque mágico." },
+    { name: "Toque Chocante", bonus: "magia", damage: "1d8", notes: "Truque de Feiticeiro. Ataque mágico corpo a corpo." },
+    { name: "Machado de mão +1", bonus: "+3", damage: "1d6+1", notes: "Arma simples. Se for machado de batalha, confirme proficiência com o mestre." },
   ],
   spells: [
-    { level: 0, name: "Mãos Mágicas", time: "Ação", tags: "V, S", notes: "Manipulação mágica à distância." },
-    { level: 0, name: "Ilusão Menor", time: "Ação", tags: "S, M", notes: "Cria uma pequena ilusão visual ou sonora." },
-    { level: 0, name: "Reparar", time: "1 minuto", tags: "V, S, M", notes: "Conserta um objeto danificado." },
-    { level: 0, name: "Prestidigitação Arcana", time: "Ação", tags: "V, S", notes: "Pequenos efeitos mágicos úteis e teatrais." },
-    { level: 0, name: "Explosão Elemental", time: "Ação", tags: "V, S", notes: "Ataque mágico. Dano: 1d8." },
-    { level: 0, name: "Toque Chocante", time: "Ação", tags: "V, S", notes: "Ataque mágico. Dano: 1d8." },
-    { level: 1, name: "Orbe Cromático", time: "Ação", tags: "V, S, M", notes: "Dano: 3d8." },
-    { level: 1, name: "Mísseis Mágicos", time: "Ação", tags: "V, S", notes: "Dano: 1d4+1 por dardo." },
-    { level: 1, name: "Raio de Bruxa", time: "Ação", tags: "V, S, M, Concentração", notes: "Dano: 2d12." },
-    { level: 1, name: "Onda Trovejante", time: "Ação", tags: "V, S", notes: "Explosão de força trovejante ao redor do conjurador." },
-    { level: 1, name: "Heroísmo", time: "Ação", tags: "V, S, Concentração", notes: "Fortalece a coragem de um alvo." },
-    { level: 1, name: "Curar Ferimentos", time: "Ação", tags: "V, S", notes: "Cura: 2d8+3." },
-    { level: 1, name: "Escudo Arcano", time: "Reação", tags: "V, S", notes: "Proteção reativa contra ataques." },
-    { level: 2, name: "Passo Nebuloso", time: "Ação bônus", tags: "V", notes: "Teleporte curto." },
-    { level: 2, name: "Aumentar/Reduzir", time: "Ação", tags: "V, S, M, Concentração", notes: "Altera o tamanho de uma criatura ou objeto." },
-    { level: 2, name: "Sugestão", time: "Ação", tags: "V, M, Concentração", notes: "Influencia uma criatura por meio de uma sugestão mágica." },
-    { level: 2, name: "Auxílio", time: "Ação", tags: "V, S, M", notes: "Fortalece aliados." },
+    { level: 0, name: "Ilusão Menor", time: "Ação", tags: "S, M", notes: "Truque de Feiticeiro.", source: "Feiticeiro", prepared: true },
+    { level: 0, name: "Prestidigitação Arcana", time: "Ação", tags: "V, S", notes: "Truque de Feiticeiro.", source: "Feiticeiro", prepared: true },
+    { level: 0, name: "Explosão Elemental", time: "Ação", tags: "V, S", notes: "Truque de Feiticeiro. Dano: 1d8.", source: "Feiticeiro", prepared: true },
+    { level: 0, name: "Toque Chocante", time: "Ação", tags: "V, S", notes: "Truque de Feiticeiro. Dano: 1d8.", source: "Feiticeiro", prepared: true },
+    { level: 0, name: "Mãos Mágicas", time: "Ação", tags: "V, S", notes: "Truque vindo do talento Iniciado em Magia (Mago).", source: "Iniciado em Magia (Mago)", prepared: true, alwaysPrepared: true },
+    { level: 0, name: "Reparar", time: "1 minuto", tags: "V, S, M", notes: "Truque vindo do talento Iniciado em Magia (Mago).", source: "Iniciado em Magia (Mago)", prepared: true, alwaysPrepared: true },
+    { level: 1, name: "Escudo Arcano", time: "Reação", tags: "V, S", notes: "Escolha sugerida para Iniciado em Magia (Mago): sempre preparada, 1 conjuração grátis por Descanso Longo e também pode usar espaços.", source: "Iniciado em Magia (Mago)", prepared: true, alwaysPrepared: true },
+    { level: 1, name: "Orbe Cromático", time: "Ação", tags: "V, S, M", notes: "Magia de Feiticeiro preparada. Dano: 3d8.", source: "Feiticeiro", prepared: true },
+    { level: 1, name: "Mísseis Mágicos", time: "Ação", tags: "V, S", notes: "Magia de Feiticeiro preparada. Dano: 1d4+1 por dardo.", source: "Feiticeiro", prepared: true },
+    { level: 1, name: "Raio de Bruxa", time: "Ação", tags: "V, S, M, Concentração", notes: "Magia de Feiticeiro preparada. Dano: 2d12.", source: "Feiticeiro", prepared: true },
+    { level: 1, name: "Onda Trovejante", time: "Ação", tags: "V, S", notes: "Magia de Feiticeiro preparada. Boa para explosão de força ao redor de John.", source: "Feiticeiro", prepared: true },
+    { level: 2, name: "Passo Nebuloso", time: "Ação bônus", tags: "V", notes: "Magia de Feiticeiro preparada. Teleporte curto.", source: "Feiticeiro", prepared: true },
+    { level: 2, name: "Aumentar/Reduzir", time: "Ação", tags: "V, S, M, Concentração", notes: "Magia de Feiticeiro preparada. Combina com pedras, minérios e manipulação de objetos.", source: "Feiticeiro", prepared: true },
+    { level: 2, name: "Sugestão", time: "Ação", tags: "V, M, Concentração", notes: "Magia válida de Feiticeiro, mas deixada como reserva porque o limite oficial no nível 3 é 6 magias de Feiticeiro preparadas.", source: "Feiticeiro", prepared: false },
+    { level: 1, name: "Heroísmo", time: "Ação", tags: "V, S, Concentração", notes: "Não aparece na lista de Feiticeiro 2024. Use apenas se o mestre liberou por regra da campanha.", source: "Extra/legado", prepared: false, legacy: true },
+    { level: 1, name: "Curar Ferimentos", time: "Ação", tags: "V, S", notes: "Não aparece na lista de Feiticeiro 2024. Use apenas se o mestre liberou por regra da campanha.", source: "Extra/legado", prepared: false, legacy: true },
+    { level: 2, name: "Auxílio", time: "Ação", tags: "V, S, M", notes: "Não aparece na lista de Feiticeiro 2024. Use apenas se o mestre liberou por regra da campanha.", source: "Extra/legado", prepared: false, legacy: true },
   ],
   proficiencies: {
     weapons: "Armas simples.",
-    armor: "Sem treinamento com armadura registrado.",
-    tools: "Calígrafo.",
+    armor: "Sem treinamento com armadura pela classe Feiticeiro.",
+    tools: "Suprimentos de Calígrafo pelo antecedente Sábio.",
   },
-  speciesTraits: "Resistência a Toxinas. Visão no Escuro. Conhecimento de Pedras.",
-  classFeatures: "Pontos de Feitiçaria 3/3. Magia Acelerada. Magia Agravada. Surto de Magia Selvagem.",
-  equipment: "Botas que não fazem barulho. 1 pergaminho de Paralisar Pessoa. Disco multicolorido. 1 Poção de Cura (2d4+2 PV). Machado +1.",
+  speciesTraits: "Anão: Visão no Escuro 36 m; Resistência a dano Venenoso e vantagem para evitar/encerrar Envenenado; Tenacidade Anã (+1 PV por nível, já considerado no máximo 23); Conhecimento de Pedras: Ação Bônus para Sismiconsciência 18 m por 10 min, usos iguais ao Bônus de Proficiência por Descanso Longo.",
+  classFeatures: "Feiticeiro nível 3: Carisma como atributo de conjuração; salvaguardas proficientes em Constituição e Carisma; 4 truques de Feiticeiro; 6 magias de Feiticeiro preparadas; espaços 4 de 1º círculo e 2 de 2º círculo; 3 Pontos de Feitiçaria; Feitiçaria Inata 2 vezes por Descanso Longo; Metamagia: Magia Acelerada e Magia Agravada; subclasse Feitiçaria Selvagem com Marés do Caos e Surto de Magia Selvagem.",
+  originFeatures: "Sábio: valores sugeridos Constituição, Inteligência e Sabedoria; Arcanismo e História; Suprimentos de Calígrafo; talento Iniciado em Magia (Mago).",
+  equipment: "Botas que não fazem barulho. 1 pergaminho de Paralisar Pessoa. Disco multicolorido. 1 Poção de Cura (2d4+2 PV). Machado de mão +1. Equipamento do Sábio, caso usado pela opção A: cajado, suprimentos de calígrafo, livro de história, 8 folhas de pergaminho, túnica e 8 PO.",
   coins: { cp: 0, sp: 0, ep: 0, gp: 217, pp: 0 },
   appearance: "Anão feiticeiro idoso, resistente, marcado por anos de estrada e túneis. Usa capa escura com inscrições rúnicas douradas e carrega ferramentas e objetos arcanos como quem nunca abandonou totalmente o sonho de minerar.",
   personality: "Teimoso, cansado e dividido entre o chamado divino e o desejo simples de ser aceito como minerador. Por fora, pode parecer alguém fugindo do próprio destino. Por dentro, ainda existe uma chama esperando motivo para voltar a arder.",
   languages: "Anão.",
   attunement: "",
+  ruleNotes: "Ajustado para Livro do Jogador 2024: CD de magia = 8 + proficiência + Carisma, ficando 13 normalmente e 14 com Feitiçaria Inata ativa. Ataques mágicos ficam +5 e recebem vantagem durante Feitiçaria Inata. O limite de magias de Feiticeiro preparadas no nível 3 é 6; magias extras antigas foram mantidas como reserva/legado, não como padrão oficial.",
   rollLog: [],
 };
-
-const wildSurgeEffects = [
-  "Pedrinhas próximas começam a orbitar John por 1 minuto, como pequenos satélites minerais.",
-  "A barba de John brilha com runas douradas até o fim da cena.",
-  "Um cheiro forte de terra molhada e mina antiga toma o ambiente por alguns segundos.",
-  "A próxima fala de John ecoa como se viesse de uma caverna profunda.",
-  "Uma moeda de ouro ilusória aparece na mão de John e desaparece quando alguém tenta pegá-la.",
-  "Por uma rodada, faíscas roxas escapam das mãos dele sempre que gesticula.",
-  "John ouve, por um instante, uma picareta batendo em pedra em algum lugar impossível.",
-  "Cristais minúsculos crescem no chão em volta dele e quebram logo depois.",
-  "A próxima magia de John deixa um rastro visual de poeira dourada e fragmentos de rocha.",
-  "Uma voz divina distante diz apenas: 'Ainda não terminou'. Ninguém sabe se foi real.",
-  "A mana se comprime: John recupera 1 ponto de feitiçaria, sem ultrapassar o máximo.",
-  "A mana escapa: John perde 1 ponto de feitiçaria, se tiver algum.",
-  "A próxima rolagem de perícia de Arcanismo, História ou Natureza recebe +1.",
-  "A próxima rolagem de ataque mágico de John recebe -1, pois a energia sai torta.",
-  "Uma pequena ilusão de uma mina aparece atrás de John por alguns segundos.",
-  "O chão treme de leve em volta dele, sem causar dano, mas denunciando sua presença.",
-  "Uma pedra comum próxima se torna morna e emite luz fraca por 1 minuto.",
-  "A magia tenta obedecer aos deuses: John tem vantagem no próximo teste ligado a ajudar outra pessoa.",
-  "A magia rejeita a fuga do destino: John tem desvantagem no próximo teste para abandonar alguém em perigo.",
-  "Surto forte: role novamente duas vezes e o mestre escolhe qual efeito entra em cena.",
-];
 
 let sheet = loadSheet();
 let currentSpellFilter = "all";
@@ -213,8 +194,12 @@ function spellMod() {
   return abilityMod(sheet.spellcasting.ability);
 }
 
+function isInnateActive() {
+  return Boolean(sheet.innateSorcery?.active);
+}
+
 function spellDC() {
-  return 8 + (Number(sheet.profBonus) || 0) + spellMod();
+  return 8 + (Number(sheet.profBonus) || 0) + spellMod() + (isInnateActive() ? 1 : 0);
 }
 
 function spellAttack() {
@@ -360,6 +345,20 @@ function renderSpellcasting() {
   document.getElementById("spellMod").textContent = fmt(spellMod());
   document.getElementById("spellDC").textContent = spellDC();
   document.getElementById("spellAttack").textContent = fmt(spellAttack());
+
+  const innateStatus = document.getElementById("innateStatus");
+  if (innateStatus) {
+    const uses = Number(sheet.innateSorcery?.uses) || 0;
+    const max = Number(sheet.innateSorcery?.max) || 2;
+    innateStatus.innerHTML = `${isInnateActive() ? "<strong>Ativa</strong>" : "Inativa"} • usos ${uses}/${max} • CD atual ${spellDC()} • ataques mágicos ${isInnateActive() ? "com vantagem" : "normais"}`;
+  }
+
+  const tidesStatus = document.getElementById("tidesStatus");
+  if (tidesStatus) {
+    tidesStatus.innerHTML = sheet.tidesOfChaos?.available
+      ? "<strong>Disponível</strong> para dar vantagem em um Teste de D20."
+      : "<strong>Usada.</strong> A próxima magia de Feiticeiro com espaço causa Surto automático e recarrega Marés do Caos.";
+  }
 }
 
 function renderSpellSlots() {
@@ -371,9 +370,11 @@ function renderSpellSlots() {
     card.className = "slot-card";
     const used = Number(slot.used) || 0;
     const max = Number(slot.max) || 0;
+    const created = Number(slot.created) || 0;
     card.innerHTML = `
-      <h3>Nível ${level}<span>${Math.max(max - used, 0)}/${max}</span></h3>
+      <h3>${level}º círculo<span>${Math.max(max - used, 0)}/${max}</span></h3>
       <div class="slot-pips">${Array.from({ length: max }, (_, index) => `<span class="slot-pip ${index < used ? "used" : ""}"></span>`).join("")}</div>
+      <p class="mini-note">${created ? `${created} espaço(s) criado(s) por Fonte de Magia até o próximo Descanso Longo.` : "Espaços oficiais/atuais."}</p>
       <div class="slot-controls">
         <button class="mini use-slot">Usar</button>
         <button class="mini restore-slot">Voltar</button>
@@ -425,8 +426,11 @@ function renderAttacks() {
     });
 
     row.querySelector(".attack-roll").addEventListener("click", () => {
-      const bonus = String(sheet.attacks[index].bonus).trim().toLowerCase() === "magia" ? spellAttack() : parseSignedNumber(sheet.attacks[index].bonus);
-      rollAndLog(`Ataque: ${sheet.attacks[index].name}`, `1d20${fmt(bonus)}`);
+      const isSpellAttack = String(sheet.attacks[index].bonus).trim().toLowerCase() === "magia";
+      const bonus = isSpellAttack ? spellAttack() : parseSignedNumber(sheet.attacks[index].bonus);
+      const mode = isSpellAttack && isInnateActive() ? "adv" : "normal";
+      const suffix = isSpellAttack && isInnateActive() ? " (Feitiçaria Inata)" : "";
+      rollAndLog(`Ataque: ${sheet.attacks[index].name}${suffix}`, `1d20${fmt(bonus)}`, mode);
     });
 
     row.querySelector(".damage-roll").addEventListener("click", () => {
@@ -448,15 +452,23 @@ function renderAttacks() {
 function renderSpells() {
   const list = document.getElementById("spellsList");
   const search = document.getElementById("spellSearch")?.value?.trim()?.toLowerCase() ?? "";
+  const summary = document.getElementById("spellPrepSummary");
+  const preparedSorcerer = sheet.spells.filter((spell) => Number(spell.level) > 0 && spell.source === "Feiticeiro" && spell.prepared).length;
+  const extraAlways = sheet.spells.filter((spell) => spell.alwaysPrepared && Number(spell.level) > 0).length;
+  if (summary) {
+    summary.innerHTML = `Magias de Feiticeiro preparadas: <strong>${preparedSorcerer}/${SORCERER_PREPARED_LIMIT}</strong>. Extras sempre preparadas por talento: <strong>${extraAlways}</strong>.`;
+    summary.classList.toggle("bad", preparedSorcerer > SORCERER_PREPARED_LIMIT);
+  }
+
   list.innerHTML = "";
 
   sheet.spells
     .filter((spell) => currentSpellFilter === "all" || String(spell.level) === currentSpellFilter)
-    .filter((spell) => !search || `${spell.name} ${spell.time} ${spell.tags} ${spell.notes}`.toLowerCase().includes(search))
-    .forEach((spell, index) => {
+    .filter((spell) => !search || `${spell.name} ${spell.time} ${spell.tags} ${spell.notes} ${spell.source ?? ""}`.toLowerCase().includes(search))
+    .forEach((spell) => {
       const realIndex = sheet.spells.indexOf(spell);
       const card = document.createElement("article");
-      card.className = "spell-card";
+      card.className = `spell-card ${spell.legacy ? "legacy" : ""}`;
       card.innerHTML = `
         <div class="spell-level">${spell.level === 0 ? "T" : spell.level}</div>
         <div>
@@ -465,18 +477,23 @@ function renderSpells() {
             <span>Nível <strong class="spell-level-text" contenteditable="true">${spell.level}</strong></span>
             <span>Tempo: <strong class="spell-time" contenteditable="true">${escapeHtml(spell.time)}</strong></span>
             <span class="spell-tags" contenteditable="true">${escapeHtml(spell.tags)}</span>
+            <span>${escapeHtml(spell.source ?? "Manual")}</span>
+            <span>${spell.prepared ? "Preparada" : "Reserva"}</span>
+            ${spell.alwaysPrepared ? "<span>Sempre preparada</span>" : ""}
           </div>
           <p class="spell-notes" contenteditable="true">${escapeHtml(spell.notes)}</p>
         </div>
         <div class="spell-actions">
           <button class="mini cast-spell">Usar</button>
           <button class="mini roll-spell-damage">Dano/Cura</button>
+          <button class="mini toggle-prepared">${spell.prepared ? "Reserva" : "Preparar"}</button>
           <button class="mini ghost remove-spell">×</button>
         </div>
       `;
 
       const syncSpell = () => {
         sheet.spells[realIndex] = {
+          ...sheet.spells[realIndex],
           level: Number(card.querySelector(".spell-level-text").textContent.trim()) || 0,
           name: card.querySelector(".spell-name").textContent.trim(),
           time: card.querySelector(".spell-time").textContent.trim(),
@@ -501,6 +518,11 @@ function renderSpells() {
         if (!expr) return addLog(`Magia: ${spell.name}`, "Nenhuma expressão de dado encontrada.");
         rollAndLog(`Dano/Cura: ${spell.name}`, expr);
       });
+      card.querySelector(".toggle-prepared").addEventListener("click", () => {
+        sheet.spells[realIndex].prepared = !sheet.spells[realIndex].prepared;
+        saveSheet();
+        renderSpells();
+      });
       card.querySelector(".remove-spell").addEventListener("click", () => {
         sheet.spells.splice(realIndex, 1);
         saveSheet();
@@ -518,19 +540,31 @@ function castSpell(index) {
     addLog(`Magia: ${spell.name}`, "Truque usado. Não consome espaço de magia.");
     return;
   }
+
   const slot = sheet.spellSlots[spell.level];
   if (!slot) {
-    addLog(`Magia: ${spell.name}`, `Não existe controle de espaços para nível ${spell.level}.`);
+    addLog(`Magia: ${spell.name}`, `Não existe controle de espaços para ${spell.level}º círculo.`);
     return;
   }
   if ((Number(slot.used) || 0) >= (Number(slot.max) || 0)) {
-    addLog(`Magia: ${spell.name}`, `Sem espaços disponíveis de nível ${spell.level}.`);
+    addLog(`Magia: ${spell.name}`, `Sem espaços disponíveis de ${spell.level}º círculo.`);
     return;
   }
+
   slot.used += 1;
+  let extra = `Consumiu 1 espaço de ${spell.level}º círculo. Restam ${slot.max - slot.used}/${slot.max}.`;
+
+  if (spell.source === "Feiticeiro" && !sheet.tidesOfChaos?.available) {
+    sheet.tidesOfChaos.available = true;
+    const d100 = randomInt(1, 100);
+    extra += `<br><strong>Marés do Caos:</strong> Surto automático ativado. Resultado d100: <strong>${d100}</strong>. Consulte a tabela Surto de Magia Selvagem do livro.`;
+  } else if (spell.source === "Feiticeiro") {
+    extra += "<br>Após conjurar com espaço, você pode usar o botão de Surto oficial uma vez neste turno.";
+  }
+
   saveSheet();
-  renderSpellSlots();
-  addLog(`Magia: ${spell.name}`, `Consumiu 1 espaço de nível ${spell.level}. Restam ${slot.max - slot.used}/${slot.max}.`);
+  refreshAll();
+  addLog(`Magia: ${spell.name}`, extra);
 }
 
 function parseSignedNumber(value) {
@@ -633,15 +667,49 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function spendSorcery(cost) {
+function spendSorcery(cost, label = "Pontos de Feitiçaria") {
   if (sheet.sorcery.current < cost) {
-    addLog("Pontos de Feitiçaria", `John não tem pontos suficientes. Custo: ${cost}.`);
-    return;
+    addLog(label, `John não tem pontos suficientes. Custo: ${cost}.`);
+    return false;
   }
   sheet.sorcery.current -= cost;
   saveSheet();
   refreshAll();
-  addLog("Pontos de Feitiçaria", `Gastou ${cost}. Restam ${sheet.sorcery.current}/${sheet.sorcery.max}.`);
+  addLog(label, `Gastou ${cost}. Restam ${sheet.sorcery.current}/${sheet.sorcery.max}.`);
+  return true;
+}
+
+function createSpellSlot(level, cost) {
+  if (!sheet.spellSlots[level]) return;
+  if (sheet.sorcery.current < cost) {
+    addLog("Fonte de Magia", `Pontos insuficientes para criar espaço de ${level}º círculo. Custo: ${cost}.`);
+    return;
+  }
+  sheet.sorcery.current -= cost;
+  sheet.spellSlots[level].max += 1;
+  sheet.spellSlots[level].created = (Number(sheet.spellSlots[level].created) || 0) + 1;
+  saveSheet();
+  refreshAll();
+  addLog("Fonte de Magia", `Criou 1 espaço de ${level}º círculo por ${cost} Pontos de Feitiçaria. Ele desaparece no próximo Descanso Longo.`);
+}
+
+function convertSlotToSorcery(level) {
+  const slot = sheet.spellSlots[level];
+  if (!slot) return;
+  const available = (Number(slot.max) || 0) - (Number(slot.used) || 0);
+  if (available <= 0) {
+    addLog("Fonte de Magia", `Sem espaço disponível de ${level}º círculo para converter.`);
+    return;
+  }
+  if (sheet.sorcery.current >= sheet.sorcery.max) {
+    addLog("Fonte de Magia", "Pontos de Feitiçaria já estão no máximo.");
+    return;
+  }
+  slot.used += 1;
+  sheet.sorcery.current = Math.min(sheet.sorcery.max, sheet.sorcery.current + Number(level));
+  saveSheet();
+  refreshAll();
+  addLog("Fonte de Magia", `Converteu 1 espaço de ${level}º círculo em ${level} Ponto(s) de Feitiçaria.`);
 }
 
 function promptNumber(message, fallback = 0) {
@@ -673,6 +741,24 @@ function applyHeal() {
   addLog("Cura recebida", `${amount} de cura. PV atuais: ${sheet.hp.current}/${sheet.hp.max}.`);
 }
 
+function longRest() {
+  sheet.hp.current = sheet.hp.max;
+  sheet.hp.temp = 0;
+  sheet.sorcery.current = sheet.sorcery.max;
+  sheet.innateSorcery.active = false;
+  sheet.innateSorcery.uses = sheet.innateSorcery.max;
+  sheet.tidesOfChaos.available = true;
+  for (const slot of Object.values(sheet.spellSlots)) {
+    const created = Number(slot.created) || 0;
+    slot.max = Math.max(0, (Number(slot.max) || 0) - created);
+    slot.created = 0;
+    slot.used = 0;
+  }
+  saveSheet();
+  refreshAll();
+  addLog("Descanso Longo", "PV, Pontos de Feitiçaria, Feitiçaria Inata, Marés do Caos e espaços de magia restaurados. Espaços criados por Fonte de Magia desapareceram.");
+}
+
 function refreshAll() {
   document.querySelectorAll("[data-bind]").forEach((input) => {
     const value = getPath(sheet, input.dataset.bind);
@@ -688,7 +774,7 @@ function exportJson() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "john-stoneheart-ficha.json";
+  a.download = "john-stoneheart-ficha-phb2024.json";
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -709,6 +795,55 @@ function importJson(file) {
   reader.readAsText(file);
 }
 
+function activateInnateSorcery() {
+  if (sheet.innateSorcery.active) {
+    addLog("Feitiçaria Inata", "Já está ativa.");
+    return;
+  }
+  if ((Number(sheet.innateSorcery.uses) || 0) <= 0) {
+    addLog("Feitiçaria Inata", "Sem usos restantes até o próximo Descanso Longo.");
+    return;
+  }
+  sheet.innateSorcery.uses -= 1;
+  sheet.innateSorcery.active = true;
+  saveSheet();
+  refreshAll();
+  addLog("Feitiçaria Inata", `Ativada por 1 minuto. CD de magia agora ${spellDC()} e ataques mágicos têm vantagem.`);
+}
+
+function endInnateSorcery() {
+  sheet.innateSorcery.active = false;
+  saveSheet();
+  refreshAll();
+  addLog("Feitiçaria Inata", "Encerrada.");
+}
+
+function useTidesOfChaos() {
+  if (!sheet.tidesOfChaos.available) {
+    addLog("Marés do Caos", "Já foi usada. Conjure uma magia de Feiticeiro com espaço para causar Surto automático e recarregar.");
+    return;
+  }
+  sheet.tidesOfChaos.available = false;
+  saveSheet();
+  refreshAll();
+  addLog("Marés do Caos", "Use antes de um Teste de D20 para ter vantagem. A próxima magia de Feiticeiro com espaço antes do Descanso Longo causa Surto automático e recarrega Marés do Caos.");
+}
+
+function wildSurgeCheck() {
+  const result = rollDiceExpression("1d20");
+  if (result.total === 20) {
+    const d100 = randomInt(1, 100);
+    addLog("Surto de Magia Selvagem", `<strong>${result.total}</strong> no d20: Surto ativado. Resultado d100: <strong>${d100}</strong>. Consulte a tabela do livro.`);
+  } else {
+    addLog("Surto de Magia Selvagem", `<strong>${result.total}</strong> no d20: sem surto. Pelo Livro do Jogador 2024, o surto acontece no 20.`);
+  }
+}
+
+function rollWildSurgeTable() {
+  const d100 = randomInt(1, 100);
+  addLog("Tabela de Surto", `Resultado d100: <strong>${d100}</strong>. Consulte a tabela Surto de Magia Selvagem do livro.`);
+}
+
 function setupActions() {
   document.body.addEventListener("click", (event) => {
     const action = event.target?.dataset?.action;
@@ -718,7 +853,7 @@ function setupActions() {
     if (action === "quick-save") saveSheet(true);
     if (action === "export-json") exportJson();
     if (action === "reset-sheet") {
-      if (window.confirm("Resetar a ficha para o padrão inicial de John?")) {
+      if (window.confirm("Resetar a ficha para o padrão inicial de John pelo Livro do Jogador 2024?")) {
         sheet = clone(defaultSheet);
         saveSheet();
         refreshAll();
@@ -726,23 +861,20 @@ function setupActions() {
     }
     if (action === "damage") applyDamage();
     if (action === "heal") applyHeal();
-    if (action === "full-heal") {
-      sheet.hp.current = sheet.hp.max;
-      sheet.hp.temp = 0;
-      sheet.sorcery.current = sheet.sorcery.max;
-      for (const slot of Object.values(sheet.spellSlots)) slot.used = 0;
-      saveSheet();
-      refreshAll();
-      addLog("Descanso", "PV, pontos de feitiçaria e espaços de magia restaurados.");
-    }
-    if (action === "spend-sp") spendSorcery(Number(event.target.dataset.cost));
+    if (action === "full-heal") longRest();
+    if (action === "spend-sp") spendSorcery(Number(event.target.dataset.cost), event.target.textContent.trim());
+    if (action === "create-slot") createSpellSlot(Number(event.target.dataset.level), Number(event.target.dataset.cost));
+    if (action === "slot-to-sp") convertSlotToSorcery(Number(event.target.dataset.level));
+    if (action === "activate-innate") activateInnateSorcery();
+    if (action === "end-innate") endInnateSorcery();
+    if (action === "use-tides") useTidesOfChaos();
     if (action === "add-attack") {
       sheet.attacks.push({ name: "Novo ataque", bonus: "magia", damage: "1d6", notes: "" });
       saveSheet();
       renderAttacks();
     }
     if (action === "add-spell") {
-      sheet.spells.push({ level: 1, name: "Nova magia", time: "Ação", tags: "", notes: "" });
+      sheet.spells.push({ level: 1, name: "Nova magia", time: "Ação", tags: "", notes: "", source: "Manual", prepared: false });
       saveSheet();
       renderSpells();
     }
@@ -754,26 +886,8 @@ function setupActions() {
       saveSheet();
       renderLog();
     }
-    if (action === "wild-surge-check") {
-      const result = rollDiceExpression("1d20");
-      let outcome = "A magia treme, mas não rompe totalmente.";
-      if (result.total === 1) outcome = "Surto forte. Role efeito selvagem agora.";
-      else if (result.total <= 5) outcome = "Instabilidade leve. O mestre pode inserir um sinal mágico pequeno.";
-      else if (result.total === 20) outcome = "A magia se alinha por um instante. John recupera 1 ponto de feitiçaria, se não estiver no máximo.";
-      if (result.total === 20) sheet.sorcery.current = Math.min(sheet.sorcery.max, sheet.sorcery.current + 1);
-      saveSheet(false);
-      refreshAll();
-      addLog("Teste de Magia Selvagem", `<strong>${result.total}</strong>. ${outcome}`);
-    }
-    if (action === "wild-surge-table") {
-      const index = randomInt(1, wildSurgeEffects.length) - 1;
-      const effect = wildSurgeEffects[index];
-      if (index === 10) sheet.sorcery.current = Math.min(sheet.sorcery.max, sheet.sorcery.current + 1);
-      if (index === 11) sheet.sorcery.current = Math.max(0, sheet.sorcery.current - 1);
-      saveSheet(false);
-      refreshAll();
-      addLog("Efeito de Magia Selvagem", `<strong>${index + 1}</strong>. ${escapeHtml(effect)}`);
-    }
+    if (action === "wild-surge-check") wildSurgeCheck();
+    if (action === "wild-surge-table") rollWildSurgeTable();
 
     if (roll === "initiative") rollAndLog("Iniciativa", `1d20${fmt(Number(sheet.initiativeBonus) || abilityMod("dex"))}`);
     if (roll === "hit-die") rollAndLog("Dado de Vida", sheet.hitDie || "1d6");
